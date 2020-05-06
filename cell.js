@@ -1,106 +1,96 @@
 
 
-function cell(c, r){
-    this.row = r;
-    this.col = c;
-    this.value = random(1) > 2; // false = white, true = black
-    this.number = r*cols + c + 1;
-    this.initial_value = this.value;
-    this.clic_count = 0;
+function cell(c, l){
+    this.ligne = l;
+    this.colonne = c;
+    this.valeur = false; // false = blanc, true = noir
+    this.nombre = l*colonnes + c + 1;
+    this.valeur_initiale = this.valeur;
+    this.clic = 0;
 }
 
 
-cell.prototype.show = function(){
+cell.prototype.afficher = function(){
     stroke(0);
     strokeWeight(0.5);
-    
     rectMode(CENTER);
-    
     stroke(0);
-    if(this.value){
-        // true
+    if(this.valeur){
+        // true = gris / blanc
         fill(128);
     } else {
-        // false
+        // false = noir
         fill(255);
     }
-    
-    rect(this.col*size + size/2, this.row*size + size/2, size*1, size*1);
-    textSize(size*0.25);
+    rect(this.colonne*taille + taille/2, this.ligne*taille + taille/2, taille*1, taille*1);
+    textSize(taille*0.25);
     textAlign(CENTER);
     fill(0);
-    text(this.number, this.col*size + size/2, this.row*size + size/2);
-    
-    for(let i = 0; i < this.clic_count; i ++){
+    text(this.nombre, this.colonne*taille + taille/2, this.ligne*taille + taille/2);
+    if(this.clic %2 != 0){
         noStroke();
         fill(0);
-        ellipse(this.col*size + i*size/10 + size/10, this.row*size + size/10, size/10, size/10)
+        ellipse(this.colonne*taille + taille/10 + taille/10, this.ligne*taille + taille/10, taille/10, taille/10)
     }
 }
 
 
-cell.prototype.show_initial = function(){
+cell.prototype.afficher_initiale = function(){
     stroke(0);
     strokeWeight(0.5);
-    
     rectMode(CENTER);
-    
     stroke(0);
-    if(this.initial_value){
-        // true
+    if(this.valeur_initiale){
+        // true = gris / blanc
         fill(128);
     } else {
-        // false
+        // false = noir
         fill(255);
     }
-    
-    
-    
-    rect(this.col*size + size/2, this.row*size + size/2, size*1, size*1);
-    textSize(size*0.25);
+    rect(this.colonne*taille + taille/2, this.ligne*taille + taille/2, taille*1, taille*1);
+    textSize(taille*0.25);
     textAlign(CENTER);
     fill(0);
-    text(this.number, this.col*size + size/2, this.row*size + size/2);
+    text(this.nombre, this.colonne*taille + taille/2, this.ligne*taille + taille/2);
 }
 
 
-
-cell.prototype.change_value = function(ar){
-    this.value = this.value == false;
-    this.clic_count ++;
-    this.clic_count %= 2;
+// change le valeur de la case courante et des cases adjacentes
+cell.prototype.changer_valeur = function(ar){
+    this.valeur = this.valeur == false;
+    this.clic ++;
     
     
-    if(this.col > 0){
-        ar[this.col-1][this.row].value = ar[this.col-1][this.row].value == 0;
+    if(this.colonne > 0){
+        ar[this.colonne-1][this.ligne].valeur = ar[this.colonne-1][this.ligne].valeur == 0;
     }
-    if(this.col + 1 < cols){
-        ar[this.col+1][this.row].value = ar[this.col+1][this.row].value == 0;
+    if(this.colonne + 1 < colonnes){
+        ar[this.colonne+1][this.ligne].valeur = ar[this.colonne+1][this.ligne].valeur == 0;
     }
-    if(this.row > 0){
-        ar[this.col][this.row-1].value = ar[this.col][this.row-1].value == 0;
+    if(this.ligne > 0){
+        ar[this.colonne][this.ligne-1].valeur = ar[this.colonne][this.ligne-1].valeur == 0;
     }
-    if(this.row + 1 < rows){
-        ar[this.col][this.row+1].value = ar[this.col][this.row+1].value == 0;
+    if(this.ligne + 1 < lignes){
+        ar[this.colonne][this.ligne+1].valeur = ar[this.colonne][this.ligne+1].valeur == 0;
     }
 }
 
 
-
+// retourne la case courante et les cases adjacentes
 cell.prototype.get_cases = function (ar){
-    let n = [];
-    n.push(this);
-    if(this.col > 0){
-        n.push(ar[this.col-1][this.row]);
+    let t = [];
+    t.push(this);
+    if(this.colonne > 0){
+        t.push(ar[this.colonne-1][this.ligne]);
     }
-    if(this.col + 1 < cols){
-        n.push(ar[this.col+1][this.row]);
+    if(this.colonne + 1 < colonnes){
+        t.push(ar[this.colonne+1][this.ligne]);
     }
-    if(this.row > 0){
-        n.push(ar[this.col][this.row-1]);
+    if(this.ligne > 0){
+        t.push(ar[this.colonne][this.ligne-1]);
     }
-    if(this.row + 1 < rows){
-        n.push(ar[this.col][this.row+1]);
+    if(this.ligne + 1 < lignes){
+        t.push(ar[this.colonne][this.ligne+1]);
     }
-    return n;
+    return t;
 }
