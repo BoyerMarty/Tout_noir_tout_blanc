@@ -55,42 +55,22 @@ cell.prototype.afficher_initiale = function(){
 }
 
 
-// change le valeur de la case courante et des cases adjacentes
-cell.prototype.changer_valeur = function(ar){
-    this.valeur = this.valeur == false;
-    this.clic ++;
-    
-    
-    if(this.colonne > 0){
-        ar[this.colonne-1][this.ligne].valeur = ar[this.colonne-1][this.ligne].valeur == 0;
-    }
-    if(this.colonne + 1 < colonnes){
-        ar[this.colonne+1][this.ligne].valeur = ar[this.colonne+1][this.ligne].valeur == 0;
-    }
-    if(this.ligne > 0){
-        ar[this.colonne][this.ligne-1].valeur = ar[this.colonne][this.ligne-1].valeur == 0;
-    }
-    if(this.ligne + 1 < lignes){
-        ar[this.colonne][this.ligne+1].valeur = ar[this.colonne][this.ligne+1].valeur == 0;
-    }
-}
-
 
 // retourne la case courante et les cases adjacentes
 cell.prototype.get_cases = function (ar){
-    let t = [];
-    t.push(this);
+    let tab = [];
+    tab.push(this);
     if(this.colonne > 0){
-        t.push(ar[this.colonne-1][this.ligne]);
+        tab.push(ar[this.colonne-1][this.ligne]);
     }
     if(this.colonne + 1 < colonnes){
-        t.push(ar[this.colonne+1][this.ligne]);
+        tab.push(ar[this.colonne+1][this.ligne]);
     }
     if(this.ligne > 0){
-        t.push(ar[this.colonne][this.ligne-1]);
+        tab.push(ar[this.colonne][this.ligne-1]);
     }
     if(this.ligne + 1 < lignes){
-        t.push(ar[this.colonne][this.ligne+1]);
+        tab.push(ar[this.colonne][this.ligne+1]);
     }
-    return t;
+    return tab;
 }
