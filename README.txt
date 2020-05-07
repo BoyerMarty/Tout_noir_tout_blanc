@@ -8,7 +8,7 @@ Projet INF 402 UGA L2 Informatique 2019 - 2020
 
 
 
-Langages : Javascript ( Librairies p5.js, dom.js ), Html
+Langages : Javascript ( Librairies p5.js, p5.dom.js ), Html
 Interface :
     L'interface est composée de :
         - un lien vers un solveur en ligne
