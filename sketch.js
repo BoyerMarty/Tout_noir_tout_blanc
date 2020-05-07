@@ -403,22 +403,20 @@ function genererFNC(save, log, zero, intro){
               if(zero){
                 clause += "0";
               }
-              
-              // on ajoute la clause générer à fnc
-              fnc.push(clause);
-              if(log){
-                console.log(clause);
-              }
-              
               // si on a atteint la fin de la boucle while
               if(num >= 2 ** cases.length - 2){
                 // saut de ligne pour séparer les clauses de chaque cases
                 clause += "\n";
               }
+              // on ajoute la clause générer à fnc
+              fnc.push(clause);
+              if(log){
+                console.log(clause);
+              }
             }
             
-            
             num ++;
+            
           }
         } 
         // Si la couleur de la case est la mauvaise
@@ -434,6 +432,7 @@ function genererFNC(save, log, zero, intro){
                 nb_bit ++;
               }
             }
+            
             
             // si le nombre de bit est impair
             if(nb_bit % 2 == 1){
@@ -467,6 +466,7 @@ function genererFNC(save, log, zero, intro){
               }
             }
             num ++;
+            
           }
         }
       } 
@@ -510,7 +510,7 @@ function genererFNC(save, log, zero, intro){
                 clause += "0";
               }
               // si on a atteint la fin de la boucle while
-              if(num > 2 ** cases.length - 2){
+              if(num >= 2 ** cases.length - 2){
                 // saut de ligne pour séparer les clauses de chaque cases
                 clause += "\n";
               }
@@ -520,7 +520,9 @@ function genererFNC(save, log, zero, intro){
                 console.log(clause);
               }
             }
+            
             num ++;
+            
           }
         } 
         // Si la couleur de la case est la mauvaise
@@ -537,9 +539,9 @@ function genererFNC(save, log, zero, intro){
               }
             }
             
+            
             // si le nombre de bit est pair
             if(nb_bit % 2 == 0){
-              
               let clause = " ";
               // pour chaque bit de num
               for(let i = 0; i < cases.length; i ++){
@@ -558,7 +560,7 @@ function genererFNC(save, log, zero, intro){
                 clause += "0";
               }
               // si on a atteint la fin de la boucle while
-              if(num > 2 ** cases.length - 2){
+              if(num >= 2 ** cases.length - 2){
                 // saut de ligne pour séparer les clauses de chaque cases
                 clause += "\n";
               }
@@ -569,6 +571,7 @@ function genererFNC(save, log, zero, intro){
               }
             }
             num ++;
+            
           }
         }
       } 
