@@ -24,7 +24,7 @@ Interface :
 
 Etapes pour résoudre une grille :
     1) Choisir la couleur cible grâce à la checkbox
-    2) Nettoyer la grille courante avec le bouton Reset (optionel)
+    2) Nettoyer la grille courante avec le bouton Reset (optionnelle)
     3) Générer une grille avec le bouton Générer
     4) Copier la forme normale conjonctive générer via le bouton Résoudre
     5) Se rendre sur le lien cliquable en haut de la page 'solveur en ligne' ( https://msoos.github.io/cryptominisat_web/ )
