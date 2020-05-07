@@ -224,7 +224,7 @@ function generate_solution(){
 
 function setup_DOM(){
   bouton_generer_grille = createButton('Génerer');
-  bouton_generer_grille.position(10,taille*lignes);
+  bouton_generer_grille.position(10,taille*lignes+20);
   bouton_generer_grille.mousePressed(generer_grille);
   
   bouton_resoudre = createButton('Résoudre');
