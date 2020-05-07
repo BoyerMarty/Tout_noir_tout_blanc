@@ -5,16 +5,20 @@
 var array;  // array[x / col][y / row]
 var colonnes = 5;
 var lignes = 5;
-var taille = 50;
+var taille;
 
 
-
-
+var bouton_resoudre;
+var bouton_reset;
+var bouton_generer_grille;
+var checkbox_couleur;
+var slider_taille_grille;
 
 
 
 function setup() {
-  createCanvas(taille*colonnes, taille*lignes*2 + taille/2 + 1);
+  createCanvas(400,400);
+  taille = width / colonnes;
   background(51);
   array = make2DArray(colonnes, lignes);
   // pour chaque case
@@ -24,8 +28,8 @@ function setup() {
       array[c][l] = new cell(c,l);
     }
   }
-
-  generer_grille(0.5);
+  
+  setup_DOM();
 }
 
 
@@ -41,9 +45,23 @@ function draw() {
     for(let l = 0; l < array[c].length; l ++){
       // affichage des cases
       array[c][l].afficher();
-      translate(0,taille*lignes + taille/2);
-      array[c][l].afficher_initiale();
-      translate(0,-(taille*lignes + taille/2));
+      //translate(0,taille*lignes + taille/2);
+      //array[c][l].afficher_initiale();
+      //translate(0,-(taille*lignes + taille/2));
+    }
+  }
+  
+  if(slider_taille_grille.value() != array.length){
+    colonnes = slider_taille_grille.value();
+    lignes = slider_taille_grille.value();
+    taille = width / colonnes;
+    array = make2DArray(colonnes, lignes);
+    // pour chaque case
+    for(let c = 0; c < array.length; c ++){
+      for(let l = 0; l < array[c].length; l ++){
+        // initialisation des cases
+        array[c][l] = new cell(c,l);
+      }
     }
   }
 }
@@ -72,7 +90,7 @@ function index(){
   let c = floor(mouseX / taille);
   let l = floor(mouseY / taille);
   if(c >= 0 && c < array.length && l >= 0 && l < array[c].length){
-    array[c][l].changer_valeur(array);
+    changer_valeur(c,l,array);
   }
 }
 
@@ -202,39 +220,129 @@ function generate_solution(){
 
 
 
-function generer_grille(proba){
-    // pour chaque case de array
-    for(let c = 0; c < array.length; c ++){
-      for(let l = 0; l < array[c].length; l ++){
-        if(random() <= proba){
-          array[c][l].changer_valeur(array);
-        }
-      }
-    }
 
-    // pour chaque case de array
-    for(let c = 0; c < array.length; c ++){
-      for(let l = 0; l < array[c].length; l ++){
-        array[c][l].clic = 0;
-        array[c][l].valeur_initiale = array[c][l].valeur;
+
+function setup_DOM(){
+  bouton_generer_grille = createButton('Génerer');
+  bouton_generer_grille.position(10,taille*lignes);
+  bouton_generer_grille.mousePressed(generer_grille);
+  
+  bouton_resoudre = createButton('Résoudre');
+  bouton_resoudre.position(bouton_generer_grille.x,bouton_generer_grille.y + bouton_generer_grille.height);
+  
+  checkbox_couleur = createCheckbox('couleur cible : 1 = noir, 0 = blanc', true); 
+  checkbox_couleur.position(bouton_resoudre.x,bouton_resoudre.y + bouton_resoudre.height);
+  
+  bouton_resoudre.mousePressed(genererFNC);
+  
+  
+  bouton_reset = createButton('Reset');
+  bouton_reset.position(checkbox_couleur.x,checkbox_couleur.y + checkbox_couleur.height);
+  bouton_reset.mousePressed(reset_grille);
+  
+  slider_taille_grille = createSlider(0,20,5,1);
+  slider_taille_grille.position(bouton_reset.x,bouton_reset.y + bouton_reset.height);
+  slider_taille_grille.style('width',height+'px');
+  
+}
+
+
+
+
+
+// change le valeur de la case et des cases adjacentes
+function changer_valeur(c,l,ar){
+  cellule = ar[c][l];
+  cellule.valeur = cellule.valeur == false;
+  cellule.clic ++;
+  
+  if(cellule.colonne > 0){
+    ar[cellule.colonne-1][cellule.ligne].valeur = ar[cellule.colonne-1][cellule.ligne].valeur == 0;
+  }
+  if(cellule.colonne + 1 < colonnes){
+    ar[cellule.colonne+1][cellule.ligne].valeur = ar[cellule.colonne+1][cellule.ligne].valeur == 0;
+  }
+  if(cellule.ligne > 0){
+    ar[cellule.colonne][cellule.ligne-1].valeur = ar[cellule.colonne][cellule.ligne-1].valeur == 0;
+  }
+  if(cellule.ligne + 1 < lignes){
+    ar[cellule.colonne][cellule.ligne+1].valeur = ar[cellule.colonne][cellule.ligne+1].valeur == 0;
+  }
+}
+
+
+function generer_grille(proba){
+  
+  proba = typeof proba !== 'undefined' ? proba : 0.5;
+  // pour chaque case de array
+  for(let c = 0; c < array.length; c ++){
+    for(let l = 0; l < array[c].length; l ++){
+      if(random() <= proba){
+        changer_valeur(c,l,array);
       }
     }
+  }
+  // pour chaque case de array
+  for(let c = 0; c < array.length; c ++){
+    for(let l = 0; l < array[c].length; l ++){
+      array[c][l].clic = 0;
+      array[c][l].valeur_initiale = array[c][l].valeur;
+    }
+  }
 }
+
+
+function reset_grille(){
+  // pour chaque case de array
+  for(let c = 0; c < array.length; c ++){
+    for(let l = 0; l < array[c].length; l ++){
+      array[c][l].valeur = checkbox_couleur.checked() != true;
+      array[c][l].valeur_initiale = !checkbox_couleur.checked() != true;
+      array[c][l].clic = 0;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 // color : false = white, true = black
 // generate a DIMACS format file to solve the current array
-function genererFNC(couleur, save, log, zero, intro){
+function genererFNC(save, log, zero, intro){
   
-  if(couleur == "noir"){
+  let couleur = checkbox_couleur.checked();
+  save = typeof save !== 'undefined' ? save : true;
+  log = typeof log !== 'undefined' ? log : true;
+  zero = typeof zero !== 'undefined' ? zero : true;
+  intro = typeof intro !== 'undefined' ? intro : true;
+  
+  if(couleur){
     // noir
-    couleur = true;
     console.log("Couleur recherchée noir.");
   } else {
     // blanc
-    couleur = false;
     console.log("Couleur recherchée blanche.");
   }
   
@@ -301,13 +409,15 @@ function genererFNC(couleur, save, log, zero, intro){
               if(log){
                 console.log(clause);
               }
+              
+              // si on a atteint la fin de la boucle while
+              if(num >= 2 ** cases.length - 2){
+                // saut de ligne pour séparer les clauses de chaque cases
+                clause += "\n";
+              }
             }
-
-            // si on a atteint la fin de la boucle while
-            if(num >= 2 ** cases.length - 2){
-              // saut de ligne pour séparer les clauses de chaque cases
-              clause += "\n";
-            }
+            
+            
             num ++;
           }
         } 
@@ -404,8 +514,8 @@ function genererFNC(couleur, save, log, zero, intro){
                 // saut de ligne pour séparer les clauses de chaque cases
                 clause += "\n";
               }
-              // on ajoute la clause générer à cnf
-              cnf.push(clause);
+              // on ajoute la clause générer à fnc
+              fnc.push(clause);
               if(log){
                 console.log(clause);
               }
@@ -452,7 +562,7 @@ function genererFNC(couleur, save, log, zero, intro){
                 // saut de ligne pour séparer les clauses de chaque cases
                 clause += "\n";
               }
-              // on ajoute la clause générer à cnf
+              // on ajoute la clause générer à fnc
               fnc.push(clause);
               if(log){
                 console.log(clause);
@@ -468,10 +578,10 @@ function genererFNC(couleur, save, log, zero, intro){
     let intro = "p cnf " + lignes*colonnes + " " + fnc.length;
     fnc.splice(0,0, intro);
   }
-  console.table(fnc);
   if(save){
     saveStrings(fnc, 'fnc.txt');
   }
+  console.table(fnc);
 }
 
 
