@@ -336,7 +336,7 @@ function genererFNC(save, log, zero, intro){
   save = typeof save !== 'undefined' ? save : true;
   log = typeof log !== 'undefined' ? log : false;
   zero = typeof zero !== 'undefined' ? zero : true;
-  intro = typeof intro !== 'undefined' ? intro : true;
+  intro = typeof intro !== 'undefined' ? intro : false;
   
   if(couleur){
     // noir
