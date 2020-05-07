@@ -240,7 +240,7 @@ function setup_DOM(){
   bouton_reset.position(checkbox_couleur.x,checkbox_couleur.y + checkbox_couleur.height);
   bouton_reset.mousePressed(reset_grille);
   
-  slider_taille_grille = createSlider(0,20,5,1);
+  slider_taille_grille = createSlider(1,20,5,1);
   slider_taille_grille.position(bouton_reset.x,bouton_reset.y + bouton_reset.height);
   slider_taille_grille.style('width',height+'px');
   
